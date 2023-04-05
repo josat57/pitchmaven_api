@@ -76,7 +76,7 @@ class AdminBll
     {
         $data = (array) $dataSet;
 
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;
         $mypost = $data;
 
@@ -171,7 +171,7 @@ class AdminBll
     {
         $data = (array) $dataSet;
 
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;
         $mypost = $data;
 
@@ -218,7 +218,7 @@ class AdminBll
      */
     private function _validateCode($dataSet)
     {
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;
         $mypost = $dataSet;
         
