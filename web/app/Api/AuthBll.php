@@ -213,7 +213,7 @@ class AuthBll
     {
         $data = (array) $dataSet;
     
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;
         $mypost = $data;
 
@@ -272,7 +272,7 @@ class AuthBll
     {
         $data = (array) $dataSet;
 
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;
         $mypost = $data;
 
@@ -319,7 +319,7 @@ class AuthBll
      */
     private function _validateCode($dataSet)
     {
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;
         $mypost = $dataSet;
         

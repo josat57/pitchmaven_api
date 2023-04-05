@@ -272,7 +272,7 @@ class UsersBll
      */
     private function _validateInputData($dataSet)
     {
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;   
         $mypost = $dataSet;
     
@@ -324,7 +324,7 @@ class UsersBll
      */
     private function _validateProfileData($dataSet)
     {
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;   
         $mypost = $dataSet;
     
@@ -394,7 +394,7 @@ class UsersBll
      */
     private function _validateSocialData($dataSet)
     {
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;   
         $mypost = $dataSet;
     
@@ -446,7 +446,7 @@ class UsersBll
     {
         $data = (array) $dataSet;   
 
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;   
         $mypost = $data;
 
@@ -496,7 +496,7 @@ class UsersBll
     {
         $data = (array) $dataSet;   
 
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;   
         $mypost = $data;
 
@@ -544,7 +544,7 @@ class UsersBll
     {
         $data = (array) $dataSet;
 
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;   
         $mypost = $data;
 
@@ -593,7 +593,7 @@ class UsersBll
     {
         $data = (array) $dataSet;
 
-        $validator = new GUMP;
+        $validator = new \GUMP;
         $rules = null;   
         $mypost = $data;
 
@@ -646,7 +646,7 @@ class UsersBll
     private function _checkExists($id, $param, $schema, $fields)
     {
         $response = array();
-        if ($this->_db->dbconnect()) {
+        if (self::getConnection()) {
             $result = $this->_db->qry("SELECT {$fields} FROM {$schema} WHERE {$id} = '?'", $param);            
             if ($result->num_rows > 0) {
                 $response = ['statuscode' => 0, 'status' => 'User exists'];
