@@ -11,7 +11,7 @@ namespace PitchMaven\Api\Dal;
  * @package  PitchMaven_API_Service
  * @author   Tamunobarasinipiri Samuel Joseph <joseph.samuel@cinfores.com>
  * @license  MIT License
- * @link     https://PollJota.idea.cinfores.com
+ * @link     https://pitchmavenapi.bootqlass.com
  */
 
 session_start();
@@ -22,9 +22,6 @@ define("BASEPATH", 1);
 
 use PitchMaven\Api\Utility;
 use PitchMaven\Data\DataOperations;
-
-use Flutterwave\EventHandlers\EventHandlerInterface;
-use \Flutterwave\Rave;
 
 /**
  * PitchMaven Items Data Access Layer Class.
@@ -93,7 +90,7 @@ class PaymentDal extends DataOperations
      */
     public static function generateRef()
     {   
-        die(var_dump(self::$_host_url));
+        die(var_dump($_SERVER['HTTP_HOST']));
         static::$table = "gk_donations_tbl";
         static::$pk = "id";
         $count = self::countAll();
