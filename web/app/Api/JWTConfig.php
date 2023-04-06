@@ -15,8 +15,8 @@ $JwtData = [
     'service_id' => $service_id,                     // User name
 ];
 
-$private_key = file_get_contents(__DIR__."/../../keys/private.pem");
-$public_key = file_get_contents(__DIR__."/../../keys/public.pem");
+$private_key = file_get_contents(__DIR__."/../../../jwtRS256.key");
+$public_key = file_get_contents(__DIR__."/../../../jwtRS256.key.pub");
 
 define("JWT_DATA", $JwtData);
 define("PRIVATE_KEY", $private_key);
