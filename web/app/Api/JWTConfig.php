@@ -15,12 +15,19 @@ $JwtData = [
     'service_id' => $service_id,                     // User name
 ];
 
-$private_key = file_get_contents(__DIR__."/../../keys/private.pem");
-$public_key = file_get_contents(__DIR__."/../../keys/public.pem");
+$private_key = file_get_contents(__DIR__."/../../../jwtRS256.key");
+$public_key = file_get_contents(__DIR__."/../../../jwtRS256.key.pub");
 
 define("JWT_DATA", $JwtData);
 define("PRIVATE_KEY", $private_key);
 define("PUBLIC_KEY", $public_key);
 define("SERVICE_ID", $service_id);
 define("DOMAIN_NAME", $domainName);
-// define("NOW_DATE", $date);
+define("NOW_DATE", $date);
+
+define("MAIL_DRIVER", getenv("MAIL_DRIVER"));
+define("MAIL_HOST", getenv("MAIL_HOST"));
+define("MAIL_PORT", getenv("MAIL_PORT"));
+define("MAIL_USERNAME", getenv("MAIL_USERNAME"));
+define("MAIL_PASSWORD", getenv("MAIL_PASSWORD"));
+define("MAIL_REPLY_TO", getenv("MAIL_REPLY_TO"));

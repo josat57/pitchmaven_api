@@ -58,28 +58,28 @@ class AuthDal extends DataOperations
         $this->_utility = new Utility();
     }
 
-    /**
-     * Sign up method
+     /**
+     * Sign up method 
      * Creates a user record on the db
-     *
+     * 
      * @return array
      */
     public function signUp()
     {
         $data = self::$_input_data;
-        static::$table = "al_users_tbl";
+        static::$table = "gk_users_tbl";
 
-        $exists = static::exists(['email'=>$data['email']]);
+        $exists = static::exists(['email'=>$data['email']]);       
              
         if ($data['password'] !== $data['confirm_password']) {
             $response = ['statuscode' => -1, 'status' => 'Password mismatch'];
-        } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        } else if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $response = ['statuscode' => -1, 'status' => 'Invalid email address'];
-        } elseif ($exists) {
+        } else if ($exists) {
             $response = ['statuscode' => -1, 'status' => 'Did you forget your password? this email address is already Signed up'];
-        } else {
-            unset($data['confirm_password']);
-            $stringify = base64_encode($data['password']);
+        } else {      
+            unset($data['confirm_password']);      
+            $stringify = base64_encode($data['password']);        
             $password = password_hash($stringify, PASSWORD_DEFAULT);
             
             $fullName = $data['first_name'] . " " . $data['last_name'];
@@ -87,72 +87,47 @@ class AuthDal extends DataOperations
             
             $details1 = ['user_id'=>$data['email'], 'extra'=>$data['mobile'], 'schema'=>static::$table];
             $details = $data['email'].'_'.$data['mobile'].static::$table;
-            $jwt = $this->_utility->generateJWTToken($details1);
+            $jwt = $this->_utility->generateJWTToken($details1);            
            
             $token = base64_encode($details."_".(string) $jwt);
-            
-            // $message = "<div style='display:flex; width:70%; height:auto; position:relative; box-sizing:border-box; background:#f0f0f0; font-family:sans-serif,arial;'><div style='width: 100%; padding: 10px; background:#2ECC71; margin:0; box-sizing:border-box; display:flex; align-items:center; justify-content:center;'><h1 style='color: #fff; font-weight: bold;'>acelinks</h1></div>";
-            // $message.="<section style='padding:2.5rem; display:flex; flex-direction:column; background:#fcfcfc;box-sizing:border-box; width:100%;'><h4 style='color: #4f4f4f; margin:15px 0;'>Hi ".$fullName.",</h4>";
-            // $message.="<p>You have received this email because you signed up with us on
-            // <a href='https://pitchmaven.bootqlass.coms.com'>acelinks</a>
-            // please click on the button bellow to verify your email and activate your account. </p><br/>";
-            
-            // $message.="<a href='".$this->_host_url."/verify_signup.html?token=".$token."&note=".$edate."' style='padding: 15px; border-radius:15px; width: 200px; background:#EA2027; color:#fff; margin:0 auto; box-sizing:border-box; text-align:center; text-decoration:none; font-size:14px; font-weight:bold; box-shadow:0px 0px 2px rgba(0, 0, 0, 0.5);'>VERIFY</a></section></div>";
-
-            // $message.="<hr /><div style='color: #4f4f4f; margin:15px;'><p>If you did not sign up with us, please ignore this email.</p></div>";
 
             $message = "<!DOCTYPE html>
-            <html>
-                <head>
-                    <meta charset='utf-8'>
-                    <meta name='viewport' content='width=device-width,minimum-scale=1'>
-                    <title>Acelinks| The professional's platform</title>
-                </head>
-                <body style='background-color:#F5F6F8;font-family:-apple-system, BlinkMacSystemFont, 'segoe ui', roboto, oxygen, ubuntu, cantarell, 'fira sans', 'droid sans', 'helvetica neue', Arial, sans-serif;box-sizing:border-box;font-size:16px;'>
-                    <div style='background-color:#fff;margin:30px;box-sizing:border-box;font-size:16px;'>
-                        <h1 style='padding:40px;box-sizing:border-box;font-size:24px;color:#ffffff;background:linear-gradient(to bottom right, rgba(97, 42, 222, 0.97), rgba(23, 10, 55, 0.9));margin:0;'>Acelinks Email Verification</h1>
-                        <h2 style='padding:20px 40px;margin:0;color:#394453;box-sizing:border-box;'>Hi ".$fullName.",</h2>
-                        <p style='padding:40px 40px 20px 40px;margin:0;box-sizing:border-box;font-size:16px;'>
-                            You have received this email because you signed up with us on
-                            <a href='https://pitchmaven.bootqlass.coms.com'>acelinks</a>
-                            please click on the button bellow to verify your email and activate your account. 
-                        </p>
-                        <div style='box-sizing:border-box;padding:0 40px 20px; width: 100%; display:flex; align-items: center; justify-content: center;'>
-                            <a href='".$this->_host_url."/verify_signup.html?token=".$token."&note=".$edate."' style='padding:15px; background: rgba(23, 10, 55, 0.9); color: #fff; font-weight:bold; box-sizing:border-box; width: 150px; text-align: center; outline: none;border:none; cursor: pointer; text-decoration:none;'>Verify</a>
-                        </div>
-                        <hr />
-                        <div style='margin:15px; padding:10px;'>
-                            <p>If you did not sign up with us, please ignore this message.</p>
-                        </div>
-                    </div>
-                </body>
+            <html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body style='margin:0; padding:0;'><main style='display:flex; flex-direction:column; width:70%; height:100vh; position:relative; box-sizing:border-box; background:#fff; font-family:sans-serif,arial;'><div style='width: 100%; padding: 25px; background:#2ECC71; margin:0; box-sizing:border-box; display:flex; align-items:center; justify-content:space-between;'><h1 style='color: #fff; font-weight: bold;'>PitchMaven</h1><p style='color:#fff;'>We are focussed in promoting local football tournament Hots, Officials and Players, for growth and impact</p></div><section style='padding:2.5rem; display:flex; flex-direction:column; box-sizing:border-box; width:100%; justify-content:center; align-items:flex-start'><h4 style='color: #4f4f4f; margin:15px 0;'>Hi ".$fullName.",</h4>
+            <p>You have received this email because you signed up with us on 
+                    <a href='https://pitchmaven.bootqlass.com'>PitchMaven</a> 
+                    please click on the button bellow to verify your email and activate your account. </p><br/>
+                    
+                    <a href='".$this->_host_url."/verify_signup.html?token=".$token."&note=".$edate."' style='padding: 15px; border-radius:25px; width: 200px; background:crimson; color:#fff; box-sizing:border-box; text-decoration:none; font-size:14px; font-weight:bold; box-shadow:0px 0px 2px rgba(0, 0, 0, 0.5); outline: none; align-self: self-start; text-align:center;'>VERIFY</a></section>
+            
+                    <div style='color: #4f4f4f; margin:15px;'><p>If you did not sign up with us, please ignore this email.</p></div>
+                </main>
+            </body>
             </html>";
             
-            $email_subj = "acelinks Email Verification";
+            $email_subj = "PitchMaven Email Verification";
             $full_name = $data['first_name'] . " " . $data['last_name'];
             $notification = (object) array(
                 'subject'=>$email_subj,
                 'message'=>$message,
                 'email'=>$data['email'],
                 'name'=>$full_name,
-                'sender' => 'josephsamuelw1@zohomail.com',
-                'appName' => 'acelinks Focussed on social Kindness'
+                'sender' => 'gokolect_info@bootqlass.com',
+                'appName' => 'PitchMaven for the love of the game'
             );
             
             $sent_email = $this->_utility->sendEmailNotification($notification);
-            
-            if (self::getConnection()) {
-                if ($sent_email) {
+
+            if (self::getConnection()) { 
+                if ($sent_email == true) {      
                     $data_array = array(
                         "first_name"=>$data['first_name'],
                         "last_name"=>$data['last_name'],
                         "password"=>$password,
                         "email"=>$data['email'],
                         "mobile"=>$data['mobile']
-                    );
+                    );         
                              
                     $stmt = static::save($data_array);
-                   
                     if ($stmt) {
                         $result = self::findOne(['email'=> $data['email']]);
                         if ($result) {
@@ -164,7 +139,7 @@ class AuthDal extends DataOperations
                         $response = ['statuscode' => -1, 'status' => "Sign up failed"];
                     }
                 } else {
-                    $response = ['statuscode' => -1,
+                    $response = ['statuscode' => -1, 
                     'status' => "Sign up failed " . $sent_email];
                 }
             } else {

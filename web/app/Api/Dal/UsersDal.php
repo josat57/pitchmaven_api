@@ -172,7 +172,7 @@ class UsersDal extends DataOperations
      */
     public function updateProfile()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "gk_users_tbl";
         static::$pk = "id";
         $upload = null;
         
@@ -189,16 +189,16 @@ class UsersDal extends DataOperations
         $item = explode('_', base64_decode($jwt));
         
         $verify_jwt = self::$_utility->decodeJWTToken($item[3], $item[0]);
-
+       
         $response = array();
-        self::$_input_data['id'] = $verify_jwt->userName;
         if ($verify_jwt->valid) {
+            $get_maggie = base64_decode($verify_jwt->maggie);
             if (self::getConnection()) {
-                                          
-                $dir = '/user_profiles';
+                $my_dir = str_replace(' ', '',self::$_input_data["last_name"].self::$_input_data["first_name"].$get_maggie);                            
+                $dir = "profiles_photos".DIRECTORY_SEPARATOR.$my_dir;
                 if (self::$_input_data['update_type'] == 'details') {
-                    if (!empty(self::$_input_file['profile_photo']['name'])) {
-                        $upload = self::$_utility->uploadImg(self::$_input_data, self::$_input_file, $dir);
+                    if (!empty(self::$_input_file['profile_photo']['type']) || !empty(self::$_input_file['profile_photo']['name']) || !empty(!self::$_input_file['profile_photo']['tmp_name'])) {
+                        $upload = self::$_utility->uploadImages(self::$_input_file, $dir);
                     } else {
                         $upload['statuscode'] = 200;
                     }
@@ -210,14 +210,14 @@ class UsersDal extends DataOperations
                     self::$_input_data['id'] = $verify_jwt->userName;
                     self::$_input_data['modified'] = date('now');
                     unset(self::$_input_data['update_type']);
-    
-                    if (!empty(self::$_input_file['profile_photo']['name'])) {
+
+                    if (!empty(self::$_input_file['profile_photo']['type']) || !empty(self::$_input_file['profile_photo']['name']) || !empty(!self::$_input_file['profile_photo']['tmp_name'])) {
                         self::$_input_data['profile_photo'] = $upload['filename'];
                         self::$_input_data['profile_path'] = $upload['target_dir'];
                         unset(self::$_input_data['avatar_remove']);
                     }                
                     $result = self::update(self::$_input_data);
-    
+
                     if ($result) {
                         $response = ['statuscode' => 0, 'status' => 'Profile updated successfully'];
                     } else {
@@ -230,8 +230,8 @@ class UsersDal extends DataOperations
                 $response = ['statuscode' => -1, 'status' => "Connection error"];
             } 
         } else {
-            $response = ['statuscode' => -1, 'status' => 'Your session has expired'];
-        }    
+            $response = ['statuscode' => -1, 'status' => "Your session has expired"];
+        }       
         return $response;
     }
 
@@ -245,7 +245,6 @@ class UsersDal extends DataOperations
     {
         static::$table = "al_users_tbl";
         static::$pk = "id";
-        $upload = null;
         
         if (empty($_SERVER['HTTP_AUTHORIZATION']) || ! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             exit(header(self::BAD_REQUEST));           

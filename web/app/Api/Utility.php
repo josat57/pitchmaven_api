@@ -46,12 +46,12 @@ class Utility
         self::$_JWTClass = new JWT();
     }
 
-    /**
+     /**
      * Email notification method
      * Sends email notification to a given email address
-     *
+     * 
      * @param object $data an object of parameters
-     *
+     * 
      * @return mixed
      */
     public function sendEmailNotification($data)
@@ -60,30 +60,29 @@ class Utility
         $response = "";
         try {
             // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            // $mail->SMTPDebug = 4;                      //Enable verbose debug output
-            $mail->isSMTP();
+            $mail->SMTPDebug = 0;                      //Enable verbose debug output
+            $mail->isSMTP();   
             $mail->Mailer = 'smtp';
             $mail->SMTPOptions = array(
                 'ssl' => array(
-                'verify_peer' => false,
-                'verify_peer_name' => false,
+                'verify_peer' => true,
+                'verify_peer_name' => true,
                 'allow_self_signed' => true
                 )
             );                                         //Send using SMTP
-            // $mail->Host       = 'ssl://smtp.gmail.com';                 //Set the SMTP server to send through
-            $mail->Host = 'smtp.zoho.com:465';                     //Set the SMTP server to send through
+            $mail->Host = MAIL_HOST;                     //Set the SMTP server to send through
             $mail->SMTPAuth = true;                                   //Enable SMTP authentication
-            $mail->Username = 'josephsamuelw1@zohomail.com';                     //SMTP username
-            $mail->Password = 'jos57atg@0806';                               //SMTP password
-            // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+            $mail->Username = MAIL_USER;                     //SMTP username
+            $mail->Password = MAIL_PASSWORD;                               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTP;            //Enable implicit TLS encryption
             $mail->SMTPSecure = "ssl";            //Enable implicit TLS encryption
-            $mail->Port = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS` 
+            $mail->Port = MAIL_PORT;               //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`           
 
             //Recipients
             $mail->setFrom($data->sender, $data->appName);
             $mail->addAddress($data->email, $data->name);     //Add a recipient
             $mail->addAddress($data->email);               //Name is optional
-            $mail->addReplyTo('josephsamuelw1@zohomail.com', 'Notification');
+            $mail->addReplyTo(MAIL_REPLY_TO, 'Notification');
             // $mail->addCC('cc@example.com');
             // $mail->addBCC('bcc@example.com');
 
@@ -99,67 +98,58 @@ class Utility
 
             $response =$mail->send();
             
-        } catch (Exception $e) {
-            $response = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        } catch (Exception $exc) {
+            $response = $exc;
         }
         return json_encode($response);
     }
 
     /**
      * Check directory for upload
-     *
+     * 
      * @param string $dir the path to the directory.
-     *
+     * 
      * @return string
      */
     private static function _dirt($dir)
     {
         $new_dir = str_replace(' ', '', $dir);
-        $applpicsdir = 'http://localhost/Acelinks_fileserver/app_files/';
+        $applpicsdir = 'file_server';
 
         if (!is_dir($applpicsdir)) {
-            $applpicsdir = "file_server/app_files/";
+            $applpicsdir = "file_server";
         } else {
             $applpicsdir = (is_link($applpicsdir)?readlink($applpicsdir):$applpicsdir)."/{$_SERVER['HTTP_HOST']}/{$new_dir}";
         }
 
-        $user_dir = self::_getRelativePath("$applpicsdir/");
+        $user_dir = self::_getRelativePath("$applpicsdir");
 
         return $user_dir = (is_link($user_dir)?readlink($user_dir):$user_dir);
     }
 
-    /**
-     * Upload team and palyer images
-     *
-     * @param object $data Object of data parsed
+   /**
+     * Upload team and gift item's image
+     * 
      * @param array  $file Object file details
      * @param string $dir  directory name to upload image
-     *
-     * @return mix
+     * @param object $data Object of data parsed
+     * 
+     * @return array
      */
-    public static function uploadItems($data, $file, $dir):array
+    public static function uploadItems($file, $dir, $data):array
     {
         $response = null;
-        $dt = strtotime(date('Ymd'));
-        $target_dirt = self::_dirt($dir);
-        $target_dir = strtolower($target_dirt.DIRECTORY_SEPARATOR.str_replace(' ', '', $dir).DIRECTORY_SEPARATOR);
         $uploadOk = null;
         $imageFileType = explode("/", $file['item_image']["type"]);
-        $filename = str_replace(' ', '', strtolower($dt."_".$data['item_code'])).".".$imageFileType[1];
-        $target_file = $target_dir."/". str_replace(' ', '', strtolower($dt."_".$data['item_code'])).".".$imageFileType[1];
-        $check = explode("/", $file['item_image']["type"]);
+        $filename = str_replace(' ', '', strtolower($data['item_code'])).".".$imageFileType[1];
         
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0777, true);
-        }
-        
-        if (empty($file['profile_photo']["tmp_name"]) || $file['profile_photo']["error"] > 0 ) {
+        if (empty($file['item_image']["tmp_name"]) || $file['item_image']["error"] > 0 ) {
             $uploadOk = ['status' => 'Please Select an item image to upload.', 'statuscode' => -1];
         } else {
             $uploadOk = 1;
         }
 
-        if ($check[0] === "image") {
+        if ($imageFileType[0] === "image") {
             $uploadOk = 1;
         } else {
             $uploadOk = ['status' => "The item image must be an image", 'statuscode' => -2];
@@ -180,56 +170,36 @@ class Utility
         if ($uploadOk != 1) {
             $response = ['status' => $uploadOk['status'], 'statuscode' => $uploadOk['statuscode']];
         } else {
-            
-            $_FILE = new  \CURLFile(
-                $file['item_image']['tmp_name'],
-                $file['item_image']['type'],
-                $file['item_image']['name']
-            );
-
-            $result = (array) self::uploadToServer($_FILE, $data['item_code'], $dir, $imageFileType);
-            if ($result['statuscode'] == 200) {
-                $response = [
-                    'status' => $result['status'],
-                    'statuscode' => $result['statuscode'],
-                    'filename' =>$result['filename'],
-                    'target_dir' => $dir
-                ];
-            } else {
-                $response = [
-                    'status' => "upload failed " . $result['status'],
-                    'statuscode' => -1
-                ];
-            }
+            $response = (array) self::uploadToServer($file, $dir, $filename, "items"); 
         }
-        return $response;
+        return $response;        
     }
 
     /**
      * Upload team and palyer images
-     *
+     * 
      * @param object $data Object of data parsed
      * @param array  $file Object file details
      * @param string $dir  directory name to upload image
-     *
-     * @return mix
+     * 
+     * @return Array
      */
-    public static function uploadImg($data, $file, $dir)
-    {
-        $target_dirt = self::_dirt($dir);
+    public static function uploadImages($file, $dir)
+    {                       
         $dt = strtotime('now');
-        $target_dir = strtolower($target_dirt.DIRECTORY_SEPARATOR.strtolower(str_replace(' ', '', $dir)). DIRECTORY_SEPARATOR);
+        $target_dir = strtolower(str_replace(' ', '', $dir));
         $uploadOk = 1;
-        $imageFileType = explode("/", $file['profile_photo']["type"]);
-        $name = "alpf". $dt .$data['id'];
-        $filename = str_replace(' ', '', $name).".".$imageFileType[1];
-        $target_file = strtolower($target_dir . str_replace(' ', '', $name).".".$imageFileType[1]);
-        $check = explode("/", $file['profile_photo']["type"]);
-        
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0777, true);
-        }
 
+        $imageFileType = explode("/", $file['profile_photo']["type"]);
+
+        $name = uniqid("gkpf")."_".$dt;
+
+        $fileName = str_replace(' ', '', $name).".".$imageFileType[1];
+
+        $target_file = strtolower($target_dir);
+
+        $check = explode("/", $file['profile_photo']["type"]);
+               
         if (empty($file['profile_photo']["tmp_name"]) || $file['profile_photo']["error"] > 0 ) {
             $uploadOk = ['status' => 'Please Select a profile image to upload.', 'statuscode' => -1];
         } else {
@@ -240,10 +210,6 @@ class Utility
             $uploadOk = 1;
         } else {
             $uploadOk = ['status' => "The image must be an image", 'statuscode' => -2];
-        }
-        
-        if (file_exists($target_file)) {
-            $uploadOk = 1;
         }
         
         if ($file['profile_photo']["size"] <= 2000000) {
@@ -264,120 +230,131 @@ class Utility
 
         if ($uploadOk != 1) {
             $response = ['status' => true, 'statuscode' => $uploadOk];
-        } else {
-
-            $_FILE = new  \CURLFile(
-                $file['profile_photo']['tmp_name'],
-                $file['profile_photo']['type'],
-                $file['profile_photo']['name']
-            );
-
-            $result = self::uploadToServer($_FILE, $data['id'], $dir, $imageFileType);
-            if ($result) {
-                $response = [
-                    'status' => $result['status'],
-                    'statuscode' => $result['statuscode'],
-                    'filename' =>$result['filename'],
-                    'target_dir' => $dir
-                ];
-            } else {
-                $response = [
-                    'status' => "Unable to upload the image " . $result['status'],
-                    'statuscode' => -1
-                ];
-            }
+        } else {        
+            $response = self::uploadToServer($file, $target_file, $fileName, "profile");
+            
+            // if (array_key_exists("statuscode", $result) && $result["statuscode"] == -1) {
+            //     $response = $result;   
+            // } elseif (array_key_exists("statuscode", $result) && $result["statuscode"] == 0) {
+            //     $response = [
+            //         'status' => $result['status'], 
+            //         'statuscode' => $result['statuscode'], 
+            //         'filename' =>$result['filename'], 
+            //         'target_dir' => $dir
+            //     ];
+            // } else {
+            //     $response = $result;  
+            // }
         }
-        return $response;
+        return $response;        
     }
     
 
     /**
      * Upload to server method.
      * Uploads file to server.
-     *
+     * 
      * @param object $file          the file to upload.
      * @param array  $data          data containing file details.
      * @param string $dir           the directory to place the file.
      * @param array  $imageFileType the type of file.
-     *
-     * @return mix
+     * 
+     * @return array
      */
-    public static function uploadToServer(object $file, string $data, string $dir, array $imageFileType)
-    {
-        $curl = curl_init();
-        $remoteData = array(
-            'data' => $data,
-            'dir' => $dir,
-            'imageFileType' => $imageFileType[1],
-            'action' => 'items',
-            'file' => $file
-        );
-     
-        curl_setopt($curl, CURLOPT_URL, "http://localhost/frontend/files/");
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $remoteData);
+    public static function uploadToServer($file, string $dir, string $file_name, String $action)
+    {      
+        $type = null; 
+        if ($action == "items") {
+            $type = "item_image";
+        } else if ($action == "profile") {
+            $type = "profile_photo";
+        }
+        $fileName = $file[$type]["name"];
+        $fileTmp = $file[$type]["tmp_name"];
+        $fileSize = $file[$type]["size"];
+        $fileType = $file[$type]["type"];
 
+        // Open the image file for reading
+        $_file = fopen($fileTmp, "r");
+        $_files = curl_file_create(realpath($fileTmp), $fileType, $fileName);
+        $remoteData = array(
+            // 'file' => $_file,
+            // 'name' => $fileName,
+            // 'type' => $fileType,
+            // 'size' => $fileSize,
+            'file' => $_files,
+            'dir' => $dir,
+            'file_name'=> $file_name,
+            'action' => $action,
+        );
+        
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, "https://pitchmaven.bootqlass.com/server/");
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $remoteData);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        
         $response = (array) json_decode(curl_exec($curl));
-        curl_close($curl);
-        if (!$curl) {
-            $response = ['statuscode' -1, 'status' => curl_error($curl) . curl_errno($curl)];
+        $error = curl_error($curl);
+        curl_close($curl); 
+        fclose($_file);
+        if ($error) {
+            $response = ['statuscode' -1, 'status' => $error];
         }
         return $response;
-    }
+    } 
 
     /**
      * Get uploaded images
-     *
+     * 
      * @param string $dir     the file directory
      * @param string $theFile the name of the file
-     *
+     * 
      * @return string
      */
-    public static function getUploadedImagesFromServer($dir, $theFile)
-    {
-        $url = "http://localhost/frontend/files/file_server".$dir."/".$theFile;
+    public static function getUploadedImagesFromServer($dir, $theFile) 
+    {                     
+        $url = "https://pitchmaven.bootqlass.com/server/file_server/$dir/$theFile";
         
         if (empty(@file_get_contents($url)) || @file_get_contents($url) === false) {
             $response = ['statuscode' => 404, 'photo' => "N/A "];
         } else {
             $imageFile = @file_get_contents($url);
             $response = ['statuscode' => 200, 'photo' => base64_encode($imageFile)];
-        }
+        }        
         return $response;
     }
 
     /**
      * Get uploaded images
-     *
+     * 
      * @param string $dir     image directory
      * @param string $theFile image
-     *
+     * 
      * @return string
      */
-    public static function getUploadedImages($dir, $theFile)
-    {
+    public static function getUploadedImages($dir, $theFile) 
+    {      
         // $applpicsdir = self::_dirt($dir);
         // $dirt = $applpicsdir;
         // $retval = [];
         // if (substr($dirt, -1) != "/") {
         //     $dirt .= "/";
         // } 
-        $dirt = "https://localhost/frontend/files/file_server/$dir";
+        $dirt = "https://pitchmaven.bootqlass.com/server/file_server/$dir";
         
-        // if (is_dir($dirt.=$dir)) {
-        if (is_dir($dirt)) {
+        // if (is_dir($dirt.=$dir)) {                            
+        if (is_dir($dirt)) {                            
             if ($handle = opendir($dirt)) {
-                while (false !== ($file = readdir($handle))) {
+                while (false !== ($file = readdir($handle))) {                
                     if ($file !== "." && $file !== "..") {
                         $imgfile = file_get_contents($dirt."/".$theFile);
-                        $retval['photo'] = base64_encode($imgfile);
+                        $retval['photo'] = base64_encode($imgfile);         
                     } else {
                         $retval['photo'] = null;
                     }
-                }
+                }            
                 closedir($handle);
             } else {
                 $retval['photo'] = null;
@@ -469,15 +446,15 @@ class Utility
 
     /**
      * Finds the schema method.
-     *
+     * 
      * Finds and returns the schema an object's data is stored in.
-     *
-     * @param string $fields   a string of fields separated with ','
+     * 
+     * @param string $fields   a string of fields separated with ',' 
      *                         to be returned when found
      * @param string $params   a string of parameters parsed based on set criteria
      * @param string $criteria a string of criteria to be used in the query
      * @param object $db       a database connection Object
-     *
+     * 
      * @return string
      */
     public static function find(String $fields, String $params, String $criteria, Object $db)
@@ -490,7 +467,7 @@ class Utility
                 $table = $field;
                 break;
             }
-        }
+        }        
         return $table;
     }
 
@@ -528,7 +505,7 @@ class Utility
     {
         $jwt = json_encode($token);
         $tokenEncoded = new TokenEncoded($jwt);
-        $now = new \DateTimeImmutable();
+        
         $serverName = rawurldecode(parse_url($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], PHP_URL_PATH));
         // $leeway = 500;
         // $tokenEncoded->validate(PUBLIC_KEY, JWT::ALGORITHM_RS256, $leeway);
