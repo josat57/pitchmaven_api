@@ -156,7 +156,7 @@ class AuthDal extends DataOperations
      */
     public function verifyEmail()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
 
         $data = self::$_input_data['token'];
 
@@ -196,7 +196,7 @@ class AuthDal extends DataOperations
     public function signIn()
     {
         $data = self::$_input_data;
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
         static::$pk = "email";
         $stringify = base64_encode($data['password']);
         
@@ -238,7 +238,7 @@ class AuthDal extends DataOperations
      */
     public function verifySession()
     {
-        static::$table = "al_session_tbl";
+        static::$table = "pm_session_tbl";
         static::$pk = "session_id";
         if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             exit(header(self::BAD_REQUEST));
@@ -369,7 +369,7 @@ class AuthDal extends DataOperations
      */
     private function _verifySession($user_id, $session_id)
     {
-        static::$table = "al_sessions_tbl";
+        static::$table = "pm_sessions_tbl";
         $data = [
             "user_id" => "user_id", "session_id" => "session_id", "session_status" => "session_status", "session_elapsed" => "session_elapsed"
         ];
@@ -395,7 +395,7 @@ class AuthDal extends DataOperations
      */
     private function _removeSession($user_id, $session_id)
     {
-        static::$table = "al_sessions_tbl";
+        static::$table = "pm_sessions_tbl";
         if (self::getConnection()) {
             $data = ['user_id'=>$user_id, 'session_id'=>$session_id];
             $result = self::delete($data);
@@ -414,7 +414,7 @@ class AuthDal extends DataOperations
      */
     public function signOut()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
                
         if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             exit(header(self::BAD_REQUEST));
@@ -458,7 +458,7 @@ class AuthDal extends DataOperations
      */
     public function changePassword()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
         if (empty($_SERVER['HTTP_AUTHORIZATION']) || ! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             exit(header(self::BAD_REQUEST));
         }
@@ -517,7 +517,7 @@ class AuthDal extends DataOperations
      */
     public function confirmOtpCode()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
         static::$pk = "confirm_code";
 
         $confirm_password = base64_encode(self::$_input_data['confirm_password']);
@@ -546,7 +546,7 @@ class AuthDal extends DataOperations
      */
     public function resetPassword()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
 
         if (!filter_var(self::$_input_data['reset_email'], FILTER_VALIDATE_EMAIL)) {
             $response = ['statuscode'=>-1,'status'=>'Email is invalid'];
@@ -602,7 +602,7 @@ class AuthDal extends DataOperations
      */
     public function deleteAccount()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
         static::$pk = "email";
         
         if (empty($_SERVER['HTTP_AUTHORIZATION']) || ! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
@@ -644,7 +644,7 @@ class AuthDal extends DataOperations
      */
     public function lockUser()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
         static::$pk = "email";
 
         if (empty($_SERVER['HTTP_AUTHORIZATION']) || ! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
@@ -694,7 +694,7 @@ class AuthDal extends DataOperations
      */
     private function _isLocked($user_id)
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
         $data = ['is_locked' => "is_locked"];
         $params = ['email' => $user_id];
         $result = self::findResults($data, $params);

@@ -50,14 +50,14 @@ class DataSchemas
         $response = "A schema must be specified";
         if (empty(self::$_schema)) {
             $res = "A schema must be specified";
-            $response = json_encode($res);
+            return json_encode($res);
         }
 
         switch (strtolower(self::$_schema)) {
 
-        case "al_admins_tbl":
+        case "pm_admins_tbl":
             $response = "
-            CREATE TABLE IF NOT EXISTS al_admins_tbl(
+            CREATE TABLE IF NOT EXISTS pm_admins_tbl(
             id INT AUTO_INCREMENT NOT NULL,
             user_name VARCHAR(200) NULL,
             first_name VARCHAR(200) NOT NULL,
@@ -91,14 +91,14 @@ class DataSchemas
             state_name VARCHAR(200) NOT NULL,
             country_id INT DEFAULT NULL,
             FOREIGN KEY fk_country_id(country_id)
-            REFERENCES al_countries_tbl(country_id),
+            REFERENCES pm_countries_tbl(country_id),
             created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
             break;
 
-        case "al_users_tbl":
+        case "pm_users_tbl":
             $response = "
-            CREATE TABLE IF NOT EXISTS al_users_tbl(
+            CREATE TABLE IF NOT EXISTS pm_users_tbl(
             id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
             first_name VARCHAR(256) DEFAULT NULL,
             last_name VARCHAR(256) DEFAULT NULL,
@@ -111,7 +111,7 @@ class DataSchemas
             state VARCHAR(200) DEFAULT NULL,
             country VARCHAR(50) DEFAULT NULL,
             place_of_birth VARCHAR(200) DEFAULT NULL,
-            marital_status VARCHAR(20) DEFAULT NULL,
+            maritpm_status VARCHAR(20) DEFAULT NULL,
             gender VARCHAR(10) DEFAULT NULL,
             mobile VARCHAR(20) DEFAULT NULL,
             status INT(11) UNSIGNED DEFAULT 0,
@@ -130,9 +130,9 @@ class DataSchemas
             ) ";
             break;
 
-        case "al_players_tbl":
+        case "pm_players_tbl":
             $response = "
-            CREATE TABLE IF NOT EXISTS al_players_tbl(
+            CREATE TABLE IF NOT EXISTS pm_players_tbl(
             id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
             first_name VARCHAR(256) DEFAULT NULL,
             last_name VARCHAR(256) DEFAULT NULL,
@@ -154,7 +154,7 @@ class DataSchemas
             state VARCHAR(200) DEFAULT NULL,
             country VARCHAR(50) DEFAULT NULL,
             place_of_birth VARCHAR(200) DEFAULT NULL,
-            marital_status VARCHAR(20) DEFAULT NULL,
+            maritpm_status VARCHAR(20) DEFAULT NULL,
             gender VARCHAR(10) DEFAULT NULL,
             mobile VARCHAR(20) DEFAULT NULL,
             status INT(11) UNSIGNED DEFAULT 0,
@@ -173,9 +173,9 @@ class DataSchemas
             ) ";
             break;            
 
-        case "al_teams_tbl":
+        case "pm_teams_tbl":
             $response = "
-            CREATE TABLE IF NOT EXISTS al_teams_tbl(
+            CREATE TABLE IF NOT EXISTS pm_teams_tbl(
             team_id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
             team_name VARCHAR(500) DEFAULT NULL,
             team_logo VARCHAR(255) DEFAULT NULL,
@@ -188,9 +188,9 @@ class DataSchemas
             )";
             break;
 
-        case "al_sessions_tbl":
+        case "pm_sessions_tbl":
             $response = "
-            CREATE TABLE IF NOT EXISTS al_sessions_tbl(
+            CREATE TABLE IF NOT EXISTS pm_sessions_tbl(
             id INT NOT NULL AUTO_INCREMENT,
             session_id VARCHAR(200) NOT NULL,
             user_id VARCHAR(200) NOT NULL,
@@ -206,9 +206,9 @@ class DataSchemas
             ";
             break;
 
-        case "al_messages_tbl":
+        case "pm_messages_tbl":
             $response = "
-            CREATE TABLE IF NOT EXISTS al_messages_tbl(
+            CREATE TABLE IF NOT EXISTS pm_messages_tbl(
                 msg_id INT NOT NULL AUTO_INCREMENT,
                 subject VARCHAR(500) NOT NULL,
                 message LONGTEXT NOT NULL,
@@ -222,9 +222,9 @@ class DataSchemas
             )";
             break;
 
-        case "al_fixtures_tbl":
+        case "pm_fixtures_tbl":
             $response = "
-            CREATE TABLE IF NOT EXISTS al_fixtures_tbl(
+            CREATE TABLE IF NOT EXISTS pm_fixtures_tbl(
                 fixture_id INT NOT NULL AUTO_INCREMENT,
                 match_date DATE DEFAULT NULL,
                 match_time TIME DEFAULT NULL,
@@ -237,9 +237,9 @@ class DataSchemas
             )";
             break;
 
-        case "al_scores_tbl":
+        case "pm_scores_tbl":
                 $response = "
-                CREATE TABLE IF NOT EXISTS al_scores_tbl(
+                CREATE TABLE IF NOT EXISTS pm_scores_tbl(
                     score_id INT NOT NULL AUTO_INCREMENT,
                     home_team VARCHAR(200) DEFAULT NULL,
                     away_team VARCHAR(200) DEFAULT NULL,
@@ -249,9 +249,9 @@ class DataSchemas
                 )";
                 break;
 
-        case "al_payments_tbl":
+        case "pm_payments_tbl":
             $response = "
-            CREATE TABLE IF NOT EXISTS al_payments_tbl(
+            CREATE TABLE IF NOT EXISTS pm_payments_tbl(
                 id INT NOT NULL AUTO_INCREMENT,
                 firstname VARCHAR(200) DEFAULT NULL,
                 lastname VARCHAR(200) DEFAULT NULL,

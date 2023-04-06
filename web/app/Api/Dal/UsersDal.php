@@ -70,7 +70,7 @@ class UsersDal extends DataOperations
      */
     public function getCurrentUser()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
         static::$pk = "id";
         
         if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
@@ -116,7 +116,7 @@ class UsersDal extends DataOperations
      */
     public function changePassword()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
         static::$pk = "email";
         $data = self::$_input_data;
         
@@ -172,7 +172,7 @@ class UsersDal extends DataOperations
      */
     public function updateProfile()
     {
-        static::$table = "gk_users_tbl";
+        static::$table = "pm_users_tbl";
         static::$pk = "id";
         $upload = null;
         
@@ -243,7 +243,7 @@ class UsersDal extends DataOperations
      */
     public function updateEmail()
     {
-        static::$table = "al_users_tbl";
+        static::$table = "pm_users_tbl";
         static::$pk = "id";
         
         if (empty($_SERVER['HTTP_AUTHORIZATION']) || ! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
@@ -290,7 +290,7 @@ class UsersDal extends DataOperations
      */
     public function giveOutItem()
     {
-        static::$table = "al_items_tbl";
+        static::$table = "pm_items_tbl";
         static::$pk = "item_code";
       
         if (empty($_SERVER['HTTP_AUTHORIZATION']) || ! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
@@ -465,7 +465,7 @@ class UsersDal extends DataOperations
      */
     public function addCategory()
     {
-        static::$table = "al_categories_tbl";
+        static::$table = "pm_categories_tbl";
         static::$pk = "id";
         $data = self::$_input_data;
        

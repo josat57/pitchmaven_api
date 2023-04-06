@@ -69,7 +69,7 @@ class AdminDal extends DataOperations
      */
     public static function addNewPlayerDetails()
     {
-        static::$table = "al_players_tbl";
+        static::$table = "pm_players_tbl";
         static::$pk = "id";
         $upload = null;
         
