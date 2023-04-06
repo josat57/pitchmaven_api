@@ -25,33 +25,28 @@ error_reporting(E_ALL);
  * @return json
  */
 function paymentRouter(array $data = null)
-{ 
-    $file = null;
-    if (isset($_FILES)) {
-        $file = $_FILES;
-    }
-    
-    $user_object = new PaymentBll($data, $file);
+{
+    $payment_object = new PaymentBll($data);
 
     switch($data['action']) {
         
-    case "make_payment":
-         include_once __DIR__ .DIRECTORY_SEPARATOR."../payment/payment.php";
+    case "process_payment":
+        $response = $payment_object->processPayment();
         break;    
         
     case "generate_ref_payment":
-        $response = $user_object->generatePayRef();
+        $response = $payment_object->generatePayRef();
         return $response;
         break;
         
-    case "process_payment":
-         include_once __DIR__.DIRECTORY_SEPARATOR."../payment/processPayment.php";
-        
+    case "verify_payment":
+         $response = $payment_object->verifyPayment();        
         break;
         
     default:
-        return ['statuscode'=>0, "status"=>"Invalid request action payment"];
-        return $response;
+        $response = ['statuscode'=>0, "status"=>"Invalid request action payment"];
         break;
     }
+    
+    return $response;
 } 
