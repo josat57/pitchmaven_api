@@ -90,7 +90,7 @@ class PaymentDal extends DataOperations
      */
     public static function generateRef()
     {  
-        static::$table = "gk_donations_tbl";
+        static::$table = "pm_donations_tbl";
         static::$pk = "id";
         $count = self::countAll();
         $lastId = self::lastSavedId();
@@ -116,7 +116,7 @@ class PaymentDal extends DataOperations
      */
     public function processPayments()
     {
-        static::$table = "gk_donations_tbl";
+        static::$table = "pm_donations_tbl";
         static::$pk = "id";
         $response = array();
         $ref = self::generateRef();
@@ -195,7 +195,7 @@ class PaymentDal extends DataOperations
      */
     public function verifyPayments()
     {
-        static::$table = "gk_donations_tbl";
+        static::$table = "pm_donations_tbl";
         static::$pk = "tx_ref";
         $response = array();
         // if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
