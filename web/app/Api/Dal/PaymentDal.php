@@ -89,8 +89,7 @@ class PaymentDal extends DataOperations
      * @return array
      */
     public static function generateRef()
-    {   
-        die(var_dump($_SERVER['HTTP_HOST']));
+    {  
         static::$table = "gk_donations_tbl";
         static::$pk = "id";
         $count = self::countAll();
