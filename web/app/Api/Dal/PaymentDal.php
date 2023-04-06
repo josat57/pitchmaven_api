@@ -157,7 +157,7 @@ class PaymentDal extends DataOperations
                 "customizations"=>array(
                     "title"=>"Gokolect Donations Window",
                     "description"=>"Your support to social kindness and global charity",
-                    "logo"=>"https://pitchmavenapi.bootqlass.com/assets/img/Gokolectlogo 1.png"
+                    "logo"=>"https://pitchmavenapi.bootqlass.com/assets/img/PitchMaven_web_logo.png"
                 ),
 
                 "meta"=>array(
