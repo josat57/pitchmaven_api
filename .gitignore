@@ -1,5 +1,5 @@
 vendor/
-# .env
+.env
 .env.test
 .htaccess234
 .htaccess
