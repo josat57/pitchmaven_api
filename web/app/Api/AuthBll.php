@@ -225,7 +225,7 @@ class AuthBll
             'email' => 'trim|sanitize_string',
             'mobile' => 'trim|sanitize_string',
             'password' => 'trim|sanitize_string',
-            'license_agreement' => 'trim|sanitize_string',
+            'accept_policy' => 'trim|sanitize_string',
             'confirm_password' => 'trim|sanitize_string',
         );
         $mypost = $validator->filter($mypost, $filters);
@@ -236,7 +236,7 @@ class AuthBll
             'email' => 'required|min_len,10',
             'mobile' => 'required|min_len,8|max_len,20',
             'password' => 'required|min_len,6',
-            'license_agreement' =>'required|min_len,1|max_len,4',
+            'accept_policy' =>'required|min_len,1|max_len,4',
             'confirm_password' => 'required|min_len,6'
         );
                
