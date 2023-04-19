@@ -53,7 +53,7 @@ class AuthDal extends DataOperations
         }
 
         // $this->_host_url = $_SERVER['HTTP_HOST'];
-        $this->_host_url = $_SERVER['HTTP_ORIGIN']."/frontend";
+        $this->_host_url = $_SERVER['HTTP_ORIGIN'];
 
         $this->_utility = new Utility();
     }
