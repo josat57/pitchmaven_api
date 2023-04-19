@@ -73,30 +73,6 @@ class DataSchemas
             )";
             break;
 
-        case "countries_tbl":
-            $response = "
-            CREATE TABLE IF NOT EXISTS countries_tbl(
-            country_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            region VARCHAR(200) DEFAULT NULL,
-            country_name VARCHAR(200) NOT NULL,
-            country_code VARCHAR(200) DEFAULT NULL,
-            created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )";
-            break;
-
-        case "states_tbl":
-            $response = "
-            CREATE TABLE IF NOT EXISTS states_tbl(
-            state_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            state_name VARCHAR(200) NOT NULL,
-            country_id INT DEFAULT NULL,
-            FOREIGN KEY fk_country_id(country_id)
-            REFERENCES pm_countries_tbl(country_id),
-            created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )ENGINE = InnoDB DEFAULT CHARSET = utf8;
-            ";
-            break;
-
         case "pm_users_tbl":
             $response = "
             CREATE TABLE IF NOT EXISTS pm_users_tbl(
@@ -112,7 +88,7 @@ class DataSchemas
             state VARCHAR(200) DEFAULT NULL,
             country VARCHAR(50) DEFAULT NULL,
             place_of_birth VARCHAR(200) DEFAULT NULL,
-            maritpm_status VARCHAR(20) DEFAULT NULL,
+            marital_status VARCHAR(20) DEFAULT NULL,
             gender VARCHAR(10) DEFAULT NULL,
             mobile VARCHAR(20) DEFAULT NULL,
             status INT(11) UNSIGNED DEFAULT 0,
@@ -122,7 +98,7 @@ class DataSchemas
             confirm_code INT(11) DEFAULT NULL,
             user_name VARCHAR(2048) DEFAULT NULL,
             password VARCHAR(2048) DEFAULT NULL,
-            license_agreement VARCHAR(10) DEFAULT NULL,
+            accept_policy VARCHAR(10) DEFAULT NULL,
             profile_photo VARCHAR(500) DEFAULT NULL,
             profile_path VARCHAR(500) DEFAULT NULL,
             created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -147,8 +123,6 @@ class DataSchemas
             role VARCHAR(20) DEFAULT NULL,
             dob Date DEFAULT NULL,
             street VARCHAR(200) DEFAULT NULL,
-            weight VARCHAR(200) DEFAULT NULL,
-            height VARCHAR(200) DEFAULT NULL,
             team_id INT(11) DEFAULT NULL,
             feet_orientation VARCHAR(200) DEFAULT NULL,
             position VARCHAR(200) DEFAULT NULL,
@@ -156,7 +130,7 @@ class DataSchemas
             state VARCHAR(200) DEFAULT NULL,
             country VARCHAR(50) DEFAULT NULL,
             place_of_birth VARCHAR(200) DEFAULT NULL,
-            maritpm_status VARCHAR(20) DEFAULT NULL,
+            marital_status VARCHAR(20) DEFAULT NULL,
             gender VARCHAR(10) DEFAULT NULL,
             mobile VARCHAR(20) DEFAULT NULL,
             status INT(11) UNSIGNED DEFAULT 0,
@@ -166,7 +140,7 @@ class DataSchemas
             confirm_code INT(11) DEFAULT NULL,
             user_name VARCHAR(2048) DEFAULT NULL,
             password VARCHAR(2048) DEFAULT NULL,
-            license_agreement VARCHAR(10) DEFAULT NULL,
+            accept_policy VARCHAR(10) DEFAULT NULL,
             profile_photo VARCHAR(500) DEFAULT NULL,
             profile_path VARCHAR(500) DEFAULT NULL,
             created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -174,7 +148,20 @@ class DataSchemas
             PRIMARY KEY(id)
             )ENGINE = InnoDB DEFAULT CHARSET = utf8;
             ";
-            break;            
+            break; 
+            
+        case "pm_players_features_tbl":
+            $response = "
+            CREATE TABLE IF NOT EXISTS pm_players_features_tbl(
+                id INT NOT NULL AUTO_INCREMENT,
+                feet_orientation VARCHAR(200) NOT NULL,
+                height DECIMAL(10, 1) NOT NULL,
+                weight DECIMAL(10, 1) NOT NULL,
+                position_on_field VARCHAR(200) NOT NULL,
+                player_id INT NOT NULL,
+                PRIMARY KEY (id)
+            )";
+            break;
 
         case "pm_teams_tbl":
             $response = "
@@ -276,16 +263,30 @@ class DataSchemas
             break;
 
         case "pm_scores_tbl":
-                $response = "
-                CREATE TABLE IF NOT EXISTS pm_scores_tbl(
-                    score_id INT NOT NULL AUTO_INCREMENT,
-                    home_team VARCHAR(200) DEFAULT NULL,
-                    away_team VARCHAR(200) DEFAULT NULL,
-                    fixture INT DEFAULT NULL,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY(id)
-                )";
-                break;
+            $response = "
+            CREATE TABLE IF NOT EXISTS pm_scores_tbl(
+                score_id INT NOT NULL AUTO_INCREMENT,
+                home_team VARCHAR(200) DEFAULT NULL,
+                away_team VARCHAR(200) DEFAULT NULL,
+                fixture INT DEFAULT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY(id)
+            )";
+            break;
+
+        case "pm_tournament_pitch_tbl":
+            $response = "
+            CREATE TABLE IF NOT EXISTS pm_tournament_pitch_tbl(
+                id INT NOT NULL AUTO_INCREMENT,
+                pitch_name VARCHAR(200) NOT NULL DEFAULT NULL,
+                pitch_capacity INT DEFAULT NULL,
+                pitch_location VARCHAR(200) NOT NULL DEFAULT NULL,
+                description LONGTEXT DEFAULT NULL,
+                tournament_id INT NOT NULL,
+                created_at TIMESTAMP DEFAULT TIMESTAMP,
+                PRIMARY KEY (id)
+            )";
+            break;
 
         case "pm_payments_tbl":
             $response = "
