@@ -25,7 +25,6 @@ error_reporting(E_ALL);
 function authRouter($data)
 {
     $auth = new AuthBll($data);
-    die(var_dump($data, $auth));
     switch ($data['action']) {
         
     case "sign_up_auth":
