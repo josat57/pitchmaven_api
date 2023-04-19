@@ -289,7 +289,7 @@ class Utility
         );
         
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, "https://pitchmaven.bootqlass.com/server/");
+        curl_setopt($curl, CURLOPT_URL, "https://pitchmaven.bootqlass.com/dashboard/server/");
         curl_setopt($curl, CURLOPT_TIMEOUT, 30);
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $remoteData);
@@ -315,7 +315,7 @@ class Utility
      */
     public static function getUploadedImagesFromServer($dir, $theFile) 
     {                     
-        $url = "https://pitchmaven.bootqlass.com/server/file_server/$dir/$theFile";
+        $url = "https://pitchmaven.bootqlass.com/dashboard/server/file_server/$dir/$theFile";
         
         if (empty(@file_get_contents($url)) || @file_get_contents($url) === false) {
             $response = ['statuscode' => 404, 'photo' => "N/A "];
@@ -342,7 +342,7 @@ class Utility
         // if (substr($dirt, -1) != "/") {
         //     $dirt .= "/";
         // } 
-        $dirt = "https://pitchmaven.bootqlass.com/server/file_server/$dir";
+        $dirt = "https://pitchmaven.bootqlass.com/dashboard/server/file_server/$dir";
         
         // if (is_dir($dirt.=$dir)) {                            
         if (is_dir($dirt)) {                            
