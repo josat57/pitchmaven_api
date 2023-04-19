@@ -67,7 +67,7 @@ class AuthDal extends DataOperations
     public function signUp()
     {
         $data = self::$_input_data;
-        static::$table = "gk_users_tbl";
+        static::$table = "pm_users_tbl";
 
         $exists = static::exists(['email'=>$data['email']]);       
              
@@ -283,7 +283,7 @@ class AuthDal extends DataOperations
      */
     private function _setSession($data)
     {
-        static::$table = "gt_sessions_tbl";
+        static::$table = "pm_sessions_tbl";
 
         if (self::getConnection()) {
             
