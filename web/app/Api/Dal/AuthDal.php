@@ -97,7 +97,7 @@ class AuthDal extends DataOperations
                     <a href='https://pitchmaven.bootqlass.com'>PitchMaven</a> 
                     please click on the button bellow to verify your email and activate your account. </p><br/>
                     
-                    <a href='".$this->_host_url."/verify_signup.html?token=".$token."&note=".$edate."' style='padding: 15px; border-radius:25px; width: 200px; background:crimson; color:#fff; box-sizing:border-box; text-decoration:none; font-size:14px; font-weight:bold; box-shadow:0px 0px 2px rgba(0, 0, 0, 0.5); outline: none; align-self: self-start; text-align:center;'>VERIFY</a></section>
+                    <a href='".$this->_host_url."/pages/verify_signup.html?token=".$token."&note=".$edate."' style='padding: 15px; border-radius:25px; width: 200px; background:crimson; color:#fff; box-sizing:border-box; text-decoration:none; font-size:14px; font-weight:bold; box-shadow:0px 0px 2px rgba(0, 0, 0, 0.5); outline: none; align-self: self-start; text-align:center;'>VERIFY</a></section>
             
                     <div style='color: #4f4f4f; margin:15px;'><p>If you did not sign up with us, please ignore this email.</p></div>
                 </main>
