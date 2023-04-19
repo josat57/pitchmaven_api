@@ -93,7 +93,8 @@ class DataSchemas
             FOREIGN KEY fk_country_id(country_id)
             REFERENCES pm_countries_tbl(country_id),
             created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )";
+            )ENGINE = InnoDB DEFAULT CHARSET = utf8;
+            ";
             break;
 
         case "pm_users_tbl":
@@ -127,7 +128,8 @@ class DataSchemas
             created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY(id)
-            ) ";
+            )ENGINE = InnoDB DEFAULT CHARSET = utf8;
+            ";
             break;
 
         case "pm_players_tbl":
@@ -170,22 +172,58 @@ class DataSchemas
             created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY(id)
-            ) ";
+            )ENGINE = InnoDB DEFAULT CHARSET = utf8;
+            ";
             break;            
 
         case "pm_teams_tbl":
             $response = "
             CREATE TABLE IF NOT EXISTS pm_teams_tbl(
-            team_id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-            team_name VARCHAR(500) DEFAULT NULL,
-            team_logo VARCHAR(255) DEFAULT NULL,
-            description LONGTEXT DEFAULT NULL,
-            team_manager VARCHAR(255) DEFAULT NULL,
-            team_coach VARCHAR(200) DEFAULT NULL,
-            team_slogan VARCHAR(255) DEFAULT NULL,
-            uploaded_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY(id)
-            )";
+                team_id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                team_name VARCHAR(500) DEFAULT NULL,
+                team_logo VARCHAR(255) DEFAULT NULL,
+                description LONGTEXT DEFAULT NULL,
+                team_manager VARCHAR(255) DEFAULT NULL,
+                team_coach VARCHAR(200) DEFAULT NULL,
+                team_slogan VARCHAR(255) DEFAULT NULL,
+                uploaded_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY(id)
+            )ENGINE = InnoDB DEFAULT CHARSET = utf8;
+            ";
+            break;
+
+        case "pm_tournament_tbl":
+            $response = "
+            CREATE TABLE IF NOT EXISTS pm_tournament_tbl(
+                id int UNSIGNED NOT NULL AUTO_INCREMENT,
+                tournament_name VARCHAR(200) NOT NULL,
+                description LONGTEXT NULL,
+                number_of_teams INT NOT NULL DEFAULT 0,
+                host INT NOT NULL,
+                start_date DATE NOT NULL,
+                end_date DATE NOT NULL,
+                city VARCHAR(200) DEFAULT NULL,
+                state VARCHAR(200) DEFAULT NULL,
+                country VARCHAR(200) DEFAULT NULL,
+                trophy_title VARCHAR(200) DEFAULT NULL,
+                created_at TIMESTAMP DEFAULT TIMESTAMP,
+                PRIMARY KEY(id)
+            )ENGINE = InnoDB DEFAULT CHARSET = utf8;
+            ";
+            break;
+
+        case "pm_tournament_awards_tbl":
+            $response = "
+            CREATE TABLE IF NOT EXISTS pm_tournament_awards_tbl(
+                id INT NOT NULL AUTO_INCREMENT,
+                award_title VARCHAR(200) NOT NULL DEFAULT NULL,
+                award_description LONGTEXT,
+                awarded_to INT NULL DEFAULT NULL,
+                created_at TIMESTAMP DEFAULT TIMESTAMP,
+                tournament_id INT NOT NULL,
+                PRIMARY KEY(id)
+            )ENGINE = InnoDB DEFAULT CHARSET = utf8;
+            ";
             break;
 
         case "pm_sessions_tbl":

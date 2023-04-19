@@ -92,7 +92,7 @@ class AuthDal extends DataOperations
             $token = base64_encode($details."_".(string) $jwt);
 
             $message = "<!DOCTYPE html>
-            <html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body style='margin:0; padding:0;'><main style='display:flex; flex-direction:column; width:70%; height:100vh; position:relative; box-sizing:border-box; background:#fff; font-family:sans-serif,arial;'><div style='width: 100%; padding: 25px; background:#2ECC71; margin:0; box-sizing:border-box; display:flex; align-items:center; justify-content:space-between;'><h1 style='color: #fff; font-weight: bold;'>PitchMaven</h1><p style='color:#fff;'>We are focussed in promoting local football tournament Hots, Officials and Players, for growth and impact</p></div><section style='padding:2.5rem; display:flex; flex-direction:column; box-sizing:border-box; width:100%; justify-content:center; align-items:flex-start'><h4 style='color: #4f4f4f; margin:15px 0;'>Hi ".$fullName.",</h4>
+            <html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body style='margin:0; padding:0;'><main style='display:flex; flex-direction:column; width:70%; height:100vh; position:relative; box-sizing:border-box; background:#fff; font-family:sans-serif,arial;'><div style='width: 100%; padding: 25px; background:#2ECC71; margin:0; box-sizing:border-box; display:flex; align-items:center; justify-content:space-between;'><h1 style='color: #fff; font-weight: bold;'>PitchMaven</h1><p style='color:#fff;'>We are focussed on promoting local football tournament Hots, Officials and Players, for growth and impact</p></div><section style='padding:2.5rem; display:flex; flex-direction:column; box-sizing:border-box; width:100%; justify-content:center; align-items:flex-start'><h4 style='color: #4f4f4f; margin:15px 0;'>Hi ".$fullName.",</h4>
             <p>You have received this email because you signed up with us on 
                     <a href='https://pitchmaven.bootqlass.com'>PitchMaven</a> 
                     please click on the button bellow to verify your email and activate your account. </p><br/>
@@ -111,7 +111,7 @@ class AuthDal extends DataOperations
                 'message'=>$message,
                 'email'=>$data['email'],
                 'name'=>$full_name,
-                'sender' => 'gokolect_info@bootqlass.com',
+                'sender' => 'pitchmaven@bootqlass.com',
                 'appName' => 'PitchMaven for the love of the game'
             );
             
@@ -386,10 +386,10 @@ class AuthDal extends DataOperations
 
     /**
      * Delete user session
-     * Deletes user's session on signout or when user is in active for a while
+     * Deletes user's session on Sign Out or when user is in active for a while
      *
      * @param string $user_id    user email
-     * @param string $session_id seesion id
+     * @param string $session_id Session id
      *
      * @return bool
      */
@@ -562,10 +562,10 @@ class AuthDal extends DataOperations
 
                 $arrDetails = (object) $result;
                 $message = "<div style='width:75%; height:auto; box-sizing:border-box; margin: 0 auto; position:relative;'>";
-                $message.="<header style='width: 100%; height:auto; padding: 15px; background:#2ECC71; margin-bottom: 25px;'><h1 style='color: #fff; font-weight: bolder;'>acelinks|<small>Focussed on social kindness</small></h1></header>";
+                $message.="<header style='width: 100%; height:auto; padding: 15px; background:#2ECC71; margin-bottom: 25px;'><h1 style='color: #fff; font-weight: bolder;'>PitchMaven|<small>We are focussed on promoting local football tournament Hots, Officials and Players, for growth and impac</small></h1></header>";
                 
                 $message.="You have received this mail because you requested for a password reset on
-                <a href='".$this->_host_url."'>acelinks</a> Use the One Time Code (OTC) to reset your password when prompted to enter confirmation code.";
+                <a href='".$this->_host_url."'>PitchMaven</a> Use the One Time Code (OTC) to reset your password when prompted to enter confirmation code.";
                 $message.="<h3>One Time Code: <span style='font-size:20px; font-weight:bolder;'>".$confirm_code."</span></h3>";
                 $message.= ". <p>If you did not initiate this process, please kindly ignore this message or change your password.</p></div>";
                     
@@ -577,8 +577,8 @@ class AuthDal extends DataOperations
                     'message'=>$message,
                     'email'=>$arrDetails->email,
                     'name'=>$full_name,
-                    'sender' => 'josephsamuelw1@zohomail.com',
-                    'appName' => 'acelinks focussed on social kindness'
+                    'sender' => 'pitchmaven@bootqlass.com',
+                    'appName' => 'PitchMaven for the love of the game'
                 );
                 $sent_email = $this->_utility->sendEmailNotification($notification);
                 

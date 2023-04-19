@@ -501,7 +501,7 @@ class Utility
      *
      * @return object
      */
-    public function decodeJWTToken(string $token = null, string $user_id = null)
+    public function decodeJWTToken($token = null, string $user_id = null)
     {
         $jwt = json_encode($token);
         $tokenEncoded = new TokenEncoded($jwt);

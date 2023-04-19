@@ -8,7 +8,7 @@
         {
             "name": "Samuel Joseph Tamunobarasinipiri",
             "email": "josephsamuelw1@gmail.com",
-            "homepage": "https://bootqlass.com",
+            "homepage": "https://pitchmaven.bootqlass.com",
             "role": "Developer"
         }
     ],
@@ -26,7 +26,7 @@
     ],
     "license": "MIT",
     "support": {
-        "email": "bootqlass@gmail.com",
+        "email": "pitchmaven@bootqlass.com",
         "irc": "irc://irc.freenode.org/composer"
     },
     "require": {
