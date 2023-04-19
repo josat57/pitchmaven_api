@@ -33,11 +33,12 @@ if (is_dir(__DIR__."/")) {
         }
     }
 } else {
-    header("HTTP/1.1 401 Unauthorized");
-    exit('Unauthorized');
+    exit(header("Location: https://pitchmavenapi.bootqlass.com"));
 }
+
 if ($requestMethod == "POST") {
     $data = $_POST;
+    
     $explode = explode("_", $data['action']);
     $route = end($explode);
     
@@ -51,13 +52,13 @@ if ($requestMethod == "POST") {
             $response = ["statuscode"=>-1, "status"=>"Posted an invalid request action"];
         }
     } else {
-        $response = "HTTP/1.1 401 Unauthorized hacker detected!!!";
+        exit(header("Location: https://pitchmavenapi.bootqlass.com"));
     }
     echo json_encode($response);
-} elseif ($requestMethod == "GET") {
-    $data = $_GET;
-    $explode = explode('_', $data['action']);
-    $route = end($explode);
+} else if ($requestMethod == "GET") {
+    $data = $_GET;    
+    $expld = explode('_', $data['action']);
+    $route = end($expld);
     if (is_file(__DIR__."/". $route. ROUTE_FILE)) {
         include_once __DIR__ .BOOTSTRAP;
         include_once __DIR__."/". $route. ROUTE_FILE;
@@ -68,11 +69,11 @@ if ($requestMethod == "POST") {
             $response = ["statuscode"=>-1, "status"=>"Got an invalid request action"];
         }
     } else {
-        $response = "HTTP/1.1 401 Unauthorized Hacker detected!";
+        exit(header("Location: https://pitchmavenapi.bootqlass.com"));
     }
     echo json_encode($response);
 
-} elseif ($requestMethod == "FILES") {
+} else if ($requestMethod == "FILES") {
     $file = $_FILES;
     $explode = explode('_', $data['action']);
     $route = end($explode);
@@ -86,7 +87,7 @@ if ($requestMethod == "POST") {
             $response = ["statuscode"=>-1, "status"=>"Invalid request action"];
         }
     } else {
-        $response = "HTTP/1.1 401 Unauthorized";
+        exit(header("Location: https://pitchmavenapi.bootqlass.com"));
     }
     echo json_encode($response);
 } else {
