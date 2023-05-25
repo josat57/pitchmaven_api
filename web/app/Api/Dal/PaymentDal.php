@@ -133,10 +133,8 @@ class PaymentDal extends DataOperations
             exit(header(self::BAD_REQUEST));
         }
         $item = explode('_', base64_decode($jwt));
-        die(var_dump($item));
         $verify_jwt = self::$_utility->decodeJWTToken($item[3], $item[0]);
         
-
         if ($verify_jwt->valid) {
 
             $post_url = "https://api.flutterwave.com/v3/payments";
