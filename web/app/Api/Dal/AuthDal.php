@@ -4,10 +4,10 @@ namespace PitchMaven\Api\Dal;
 
 /**
  * The connection class, this file is configured to connect to the database
- *
+ *Data Access Layer DAL
  * PHP version 8.1.6
  *
- * @category API
+ * @category Web_Application
  * @package  PitchMaven_API_Service
  * @author   Tamunobarasinipiri Joseph Samuel <josephsamuelw1@gmail.com>
  * @license  MIT license
@@ -19,13 +19,12 @@ use PitchMaven\Api\Utility;
 use PitchMaven\Data\DataOperations;
 
 /**
- * acelinks Authentication class holds all attributes of the authentication functionalities.
- * acelinks Authentication class holds all attributes of the authentication functionalities from
- * sign up to email verification and session management.
+ * PitchMaven Authentication  Data Access Layer class holds all attributes of the authentication functionalities.
+ * Data Access Layer DAL
  *
  * PHP Version 8.1.3
  *
- * @category API
+ * @category Web_Application
  * @package  PitchMaven_API_Service
  * @author   Tamunobarasinipiri Joseph Samuel <josephsamuelw1@gmail.com>
  * @license  MIT license
@@ -56,6 +55,27 @@ class AuthDal extends DataOperations
         $this->_host_url = $_SERVER['HTTP_ORIGIN'];
 
         $this->_utility = new Utility();
+    }
+
+    /**
+     * Generate general token method.
+     * Generates a request token for general authentication.
+     * 
+     * @return array
+     */
+    public function setGeneralToken()
+    {
+        session_start();
+        $year = date('Y');
+        $id = strtotime(date('Y')).uniqid();
+        $hash = password_hash('pitchmaven@'.$year, PASSWORD_DEFAULT);
+        $details1 = ['user_id'=>$id, 'extra'=>session_id(), 'schema'=>self::$table, 'email'=>$hash];
+
+        $details = $id.'_'.session_id().'_'.$hash;
+        $jwt = self::$_utility->generateJWTToken($details1); 
+        $token = base64_encode($details."_".(string) $jwt);
+        $response = ['statuscode' => 0, 'status' => 'token created', 'data' => $token];
+        return $response;
     }
 
      /**
@@ -124,7 +144,8 @@ class AuthDal extends DataOperations
                         "last_name"=>$data['last_name'],
                         "password"=>$password,
                         "email"=>$data['email'],
-                        "mobile"=>$data['mobile']
+                        "mobile"=>$data['mobile'],
+                        "accept_policy"=>$data['accept_policy']
                     );         
                              
                     $stmt = static::save($data_array);

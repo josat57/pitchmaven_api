@@ -27,6 +27,10 @@ function authRouter($data)
     $auth = new AuthBll($data);
     switch ($data['action']) {
         
+    case "get_token_auth":
+        $response = $auth->requestSetToken();
+        break;
+
     case "sign_up_auth":
         $response = $auth->signUpUsers();
         break;

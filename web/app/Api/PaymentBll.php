@@ -2,34 +2,34 @@
 
 namespace PitchMaven\Api;
 /**
- * Gokolect Payment class holds all 
- * attributes of payment functionalities
+ * PitchMaven Payment Business Logic Layer class
+ * Business Logic Layer Class
  * 
  * PHP Version 8.1.3
  * 
  * @category Web_Application
- * @package  PitchMaven_API
+ * @package  PitchMaven_API_Service
  * @author   Tamunobarasinipiri Samuel Joseph <joseph.samuel@cinfores.com>
  * @license  MIT License
  * @link     https://pitchmaven.bootqlass.com
  */
 
 use PitchMaven\Api\Dal\PaymentDal;
-use \GUMP\GUMP;
+use GUMP;
 
 require_once __DIR__."/JWTConfig.php";
 
 /**
- * PollJota Admin class holds all attributes of the Administration functionalities
- * Admin Class
+ * PitchMaven Payment Business Logic Layer class.
+ * Business Logic Layer BLL
  * 
  * PHP Version 8.1.3
  * 
  * @category Web_Application
- * @package  Gokolect
+ * @package  PitchMaven_API_Service
  * @author   Tamunobarasinipiri Samuel Joseph <joseph.samuel@cinfores.com>
  * @license  MIT License
- * @link     https://Gokolect.com
+ * @link     https://pitchmaven.bootqlass.com
  */
 class PaymentBll
 {
@@ -115,33 +115,34 @@ class PaymentBll
     {
         $data = (array) $dataSet;   
 
-        $validator = new \GUMP;
+        $validator = new GUMP;
         $rules = null;   
         $myPost = $data;
 
         $myPost = $validator->sanitize($myPost);
 
         $filters = array(
-            'firstname' => 'trim|sanitize_string',
-            'lastname' => 'trim|sanitize_string',
+            'first_name' => 'trim|sanitize_string',
+            'last_name' => 'trim|sanitize_string',
             'email' => 'trim|sanitize_string',
-            'phonenumber' => 'trim|sanitize_string',
+            'mobile' => 'trim|sanitize_string',
             'amount' => 'trim|sanitize_string',
             'currency' => 'trim|sanitize_string',
             'country' => 'trim|sanitize_string',
-            'comment' => 'trim|sanitize_string',
+            'password' => 'trim|sanitize_string',
+            'confirm_password' => 'trim|sanitize_string',
         );
         $myPost = $validator->filter($myPost, $filters);
         
         $rules = array(
-            'firstname' => 'required|min_len,3|max_len,200',
-            'lastname' => 'required|min_len,3|max_len,200',
+            'first_name' => 'required|min_len,3|max_len,200',
+            'last_name' => 'required|min_len,3|max_len,200',
             'email' => 'required|min_len,3|max_len,200',
-            'phonenumber' => 'required|min_len,8|max_len,14',
+            'mobile' => 'required|min_len,8|max_len,14',
             'amount' => 'required|numeric',
             'currency' => 'required|min_len,2',
             'country' => 'required|min_len,2',
-            'comment' => 'min_len,5',
+            'password' => 'required|min_len,6|max_len,25',
         );
                
 
@@ -176,7 +177,7 @@ class PaymentBll
     {
         $data = (array) $dataSet;   
 
-        $validator = new \GUMP;
+        $validator = new GUMP;
         $rules = null;   
         $myPost = $data;
 

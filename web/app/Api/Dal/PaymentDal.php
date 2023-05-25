@@ -2,8 +2,8 @@
 
 namespace PitchMaven\Api\Dal;
 /**
- * PitchMaven Items Data Access Layer class. 
- * Holds all attributes and methods of class.
+ * PitchMaven Data Access Layer class. 
+ * Data Access Layer DAL
  * 
  * PHP Version 8.1.3
  * 
@@ -22,10 +22,11 @@ define("BASEPATH", 1);
 
 use PitchMaven\Api\Utility;
 use PitchMaven\Data\DataOperations;
+use PitchMaven\Api\Dal\AuthDal;
 
 /**
  * PitchMaven Items Data Access Layer Class.
- * Items Class
+ * Data Access Layer DAL
  * 
  * PHP Version 8.1.3
  * 
@@ -42,7 +43,7 @@ class PaymentDal extends DataOperations
     private static $_utility = null;
     private const BAD_REQUEST = "HTTP/1.0 400 Bad Request";
     private static $_payment = null;
-    private static $_prefix = "gkt_"; // Change this to the name of your business or app
+    private static $_prefix = "pmp_"; // Change this to the name of your business or app
     private static $_overrideRef = false;
 
     /**
@@ -140,7 +141,7 @@ class PaymentDal extends DataOperations
 
             $post_url = "https://api.flutterwave.com/v3/payments";
 
-            $name = self::$_input_data["lastname"]." ".self::$_input_data["firstname"];
+            $name = self::$_input_data["last_name"]." ".self::$_input_data["first_name"];
 
             $post_data = array(
                 "tx_ref"=>$ref["data"],
@@ -149,7 +150,7 @@ class PaymentDal extends DataOperations
                 "customer"=>array(
                     "name"=>$name,
                     "email"=>self::$_input_data["email"],
-                    "phone_number"=>self::$_input_data["phonenumber"]
+                    "phone_number"=>self::$_input_data["mobile"]
                 ),
                 "customizations"=>array(
                     "title"=>self::$_input_data["payment_title"],
@@ -158,8 +159,8 @@ class PaymentDal extends DataOperations
                 ),
 
                 "meta"=>array(
-                    "first_name"=>self::$_input_data["firstname"],
-                    "last_name"=>self::$_input_data["lastname"],
+                    "first_name"=>self::$_input_data["first_name"],
+                    "last_name"=>self::$_input_data["last_name"],
                     "reason"=> "Making the world a better place by engaging people in social kindness.",
                     "comment"=> self::$_input_data["comment"]
                 ),
@@ -169,17 +170,18 @@ class PaymentDal extends DataOperations
             $result = (object) self::handleCURL($post_data, $post_url);
             
             $saveable_data = [
-                "firstname"=>self::$_input_data["firstname"],
-                "lastname"=>self::$_input_data["lastname"],
+                "first_name"=>self::$_input_data["first_name"],
+                "last_name"=>self::$_input_data["last_name"],
                 "email"=>self::$_input_data["email"],
-                "phonenumber"=>self::$_input_data["phonenumber"],
+                "mobile"=>self::$_input_data["mobile"],
                 "country"=>self::$_input_data["country"],
                 "currency"=>self::$_input_data["currency"],
                 "amount"=>self::$_input_data["amount"],
-                "comment"=>self::$_input_data["comment"],
                 "tx_ref"=>$ref["data"]
             ];
-            $save = self::save($saveable_data);
+
+            self::save($saveable_data);
+            
             $response = $result->data->link;        
         } else {
             exit(header("HTTP/1.1 500 Internal Server Error <br> You are not allowed to access this page"));
@@ -264,9 +266,15 @@ class PaymentDal extends DataOperations
                     ];
                     $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
                     if ($check) {
+
+                        //Save user data to user table on successful payment verification
+                        $save_user = new AuthDal(self::$_input_data);
+                        $save_user->signUp();
+
+                        //check if user data saved into payment table successfully
                         if (self::update($saveable_data)) {
                             // $response = ["statuscode" => 0, "status" => "Thank you for your donation"];
-                            header("Location:https://pitchmaven.bootqlass.com/donation_success.html");
+                            header("Location:https://pitchmaven.bootqlass.com/pages/signup_success.html");
                             exit();
                         } else {
                             $response = ["statuscode" =>-1, "status" => "Unable to complete your donation at the moment"];
@@ -274,7 +282,7 @@ class PaymentDal extends DataOperations
                     } else {                        
                         if (self::save($saveable_data)) {
                             // $response = ["statuscode" => 0, "status" => "Thank you for your donation"];
-                            header("Location:https://pitchmaven.bootqlass.com/donation_success.html");
+                            header("Location:https://pitchmaven.bootqlass.com/pages/signup_success.html");
                             exit();
                         } else {
                             $response = ["statuscode" =>-1, "status" => "Unable to complete your donation at the moment"];

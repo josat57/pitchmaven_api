@@ -50,6 +50,18 @@ class AuthBll
     }
 
     /**
+     * Generate General token method.
+     * Requests for a general purpose token.
+     * 
+     * @return array
+     */
+    public function requestSetToken()
+    {
+        $auth = new AuthDal();
+        return $auth->setGeneralToken();
+    }
+
+    /**
      * Sign up method
      * Creates a user record on the db
      *

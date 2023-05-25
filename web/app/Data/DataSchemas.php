@@ -292,10 +292,10 @@ class DataSchemas
             $response = "
             CREATE TABLE IF NOT EXISTS pm_payments_tbl(
                 id INT NOT NULL AUTO_INCREMENT,
-                firstname VARCHAR(200) DEFAULT NULL,
-                lastname VARCHAR(200) DEFAULT NULL,
+                first_name VARCHAR(200) DEFAULT NULL,
+                last_name VARCHAR(200) DEFAULT NULL,
                 email VARCHAR(200) DEFAULT NULL,
-                phonenumber VARCHAR(200) DEFAULT NULL,
+                mobile VARCHAR(200) DEFAULT NULL,
                 country VARCHAR(200) DEFAULT NULL,
                 amount DECIMAL(12,2) DEFAULT NULL,
                 currency VARCHAR(20) DEFAULT NULL,
