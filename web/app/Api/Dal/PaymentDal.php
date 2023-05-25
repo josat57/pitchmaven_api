@@ -181,6 +181,10 @@ class PaymentDal extends DataOperations
             self::$_user_details = self::$_input_data;
             self::save($saveable_data);
             
+            //Save user data to user table on successful payment verification
+            $save_user = new AuthDal(self::$_input_data);
+            $save_user->signUp();
+            
             $response = $result->data->link;        
         } else {
             exit(header("HTTP/1.1 500 Internal Server Error <br> You are not allowed to access this page"));
@@ -265,10 +269,10 @@ class PaymentDal extends DataOperations
                     ];
                     $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
                     if ($check) {
-                        die(var_dump(self::$_input_data, self::$_user_details));
+                        // die(var_dump(self::$_input_data, self::$_user_details));
                         //Save user data to user table on successful payment verification
-                        $save_user = new AuthDal(self::$_user_details);
-                        $save_user->signUp();
+                        // $save_user = new AuthDal(self::$_user_details);
+                        // $save_user->signUp();
 
                         //check if user data saved into payment table successfully
                         if (self::update($saveable_data)) {
