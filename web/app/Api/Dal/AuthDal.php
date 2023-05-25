@@ -72,7 +72,7 @@ class AuthDal extends DataOperations
         $details1 = ['user_id'=>$id, 'extra'=>session_id(), 'schema'=>self::$table, 'email'=>$hash];
 
         $details = $id.'_'.session_id().'_'.$hash;
-        $jwt = self::$_utility->generateJWTToken($details1); 
+        $jwt = $this->_utility->generateJWTToken($details1); 
         $token = base64_encode($details."_".(string) $jwt);
         $response = ['statuscode' => 0, 'status' => 'token created', 'data' => $token];
         return $response;
