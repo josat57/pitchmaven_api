@@ -264,8 +264,7 @@ class PaymentDal extends DataOperations
                         "expiry"=>$response_data->data->card->expiry,
                         "transaction_country"=>$response_data->data->card->country,
                         "customer_id"=>$response_data->data->customer->id,
-                        "payment_date"=>$response_data->data->created_at,
-                        "customer_id"=>$response_data->data->customer->id
+                        "payment_date"=>$response_data->data->created_at
                     ];
                     $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
                     if ($check) {
