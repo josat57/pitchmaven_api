@@ -45,6 +45,7 @@ class PaymentDal extends DataOperations
     private static $_payment = null;
     private static $_prefix = "pmp_"; // Change this to the name of your business or app
     private static $_overrideRef = false;
+    private static $_user_details = [];
 
     /**
      * Class constructor
@@ -177,7 +178,7 @@ class PaymentDal extends DataOperations
                 "amount"=>self::$_input_data["amount"],
                 "tx_ref"=>$ref["data"]
             ];
-
+            self::$_user_details = self::$_input_data;
             self::save($saveable_data);
             
             $response = $result->data->link;        
@@ -264,9 +265,9 @@ class PaymentDal extends DataOperations
                     ];
                     $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
                     if ($check) {
-                        die(var_dump(self::$_input_data));
+                        die(var_dump(self::$_input_data, self::$_user_details));
                         //Save user data to user table on successful payment verification
-                        $save_user = new AuthDal(self::$_input_data);
+                        $save_user = new AuthDal(self::$_user_details);
                         $save_user->signUp();
 
                         //check if user data saved into payment table successfully
