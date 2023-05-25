@@ -264,7 +264,7 @@ class PaymentDal extends DataOperations
                     ];
                     $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
                     if ($check) {
-
+                        die(var_dump(self::$_input_data));
                         //Save user data to user table on successful payment verification
                         $save_user = new AuthDal(self::$_input_data);
                         $save_user->signUp();
