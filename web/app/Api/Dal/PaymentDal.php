@@ -152,14 +152,14 @@ class PaymentDal extends DataOperations
                 ),
                 "customizations"=>array(
                     "title"=>self::$_input_data["payment_title"],
-                    "description"=>"Your support to social kindness and global charity",
+                    "description"=>"Payment for tournament subscription",
                     "logo"=>"https://pitchmavenapi.bootqlass.com/assets/img/PitchMaven_web_logo.png"
                 ),
 
                 "meta"=>array(
                     "first_name"=>self::$_input_data["first_name"],
                     "last_name"=>self::$_input_data["last_name"],
-                    "reason"=> "Making the world a better place by engaging people in social kindness.",
+                    "reason"=> "For the love of the game",
                     "comment"=> self::$_input_data["comment"]
                 ),
                 "redirect_url"=>"https://pitchmavenapi.bootqlass.com/?action=verify_payment"
